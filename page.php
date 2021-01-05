@@ -3,17 +3,15 @@
   get_header();
 
   while(have_posts()) {
-    the_post(); ?>
+    the_post(); 
+    pageBanner(array(
+      // 'title' => 'This title.',
+      // 'subtitle' => 'here some dummy text for subtitle.',
+      // 'photo' => 'https://www.dar-kom.com/wp-content/uploads/2020/03/Fes-Medina-scaled.jpg',
+    ));
+    ?>
     
-    <div class="page-banner">
-      <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg') ?>);"></div>
-      <div class="page-banner__content container container--narrow">
-        <h1 class="page-banner__title"><?php the_title(); ?></h1>
-        <div class="page-banner__intro">
-          <p>DONT FORGET TO REPLACE ME LATER</p>
-        </div>
-      </div>  
-    </div>
+    
 
     <div class="container container--narrow page-section">
     
@@ -29,11 +27,11 @@
     
     
     <?php 
-    $testArray = get_pages(array(
+    $getArray = get_pages(array(
       'child_of' => get_the_ID()
     ));
 
-    if ($theParent or $testArray) { ?>
+    if ($theParent or $getArray) { ?>
     <div class="page-links">
       <h2 class="page-links__title"><a href="<?php echo get_permalink($theParent); ?>"><?php echo get_the_title($theParent); ?></a></h2>
       <ul class="min-list">
