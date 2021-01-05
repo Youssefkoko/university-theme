@@ -54,3 +54,39 @@ function university_query_default_query($query){
   }
 }
 add_action('pre_get_posts', 'university_query_default_query');
+
+function PageBanner($args = NULL) {
+  if(!$args['title']){
+    $args['title'] = get_the_title();
+  }
+  if(!$args['subtitle']){
+    $args['subtitle'] = get_field('page_banner_subtitle');
+  }
+  if(!$args['photo']){
+    if(get_field('page_banner_background_image') AND !is_archive() AND !is_home() ){
+
+      $args['photo'] = get_field('page_banner_background_image')['sizes']['pageBanner'];
+    }else{
+      $args['photo'] = get_theme_file_uri('./images/ocean.jpg');
+    }
+  }
+  ?>
+  <div class="page-banner">
+      <div class="page-banner__bg-image" 
+        style="background-image: url(<?php echo $args['photo']; ?>);">
+      </div>
+      <div class="page-banner__content container container--narrow">
+        <h1 class="page-banner__title"><?php if($args['title']) echo $args['title']; ?></h1>
+        <div class="page-banner__intro">
+          <p>
+            <?php if($args['subtitle']){
+            // echo get_field('page_banner_subtitle'); 
+            echo $args['subtitle']; 
+          }
+            ?>
+          </p>
+        </div>
+      </div>  
+    </div> 
+  <?php 
+}
