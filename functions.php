@@ -30,6 +30,13 @@ add_action('after_setup_theme', 'university_features');
 
 
 function university_query_default_query($query){
+  // Create custom Query for Campus
+  if(!is_admin() AND is_post_type_archive('canpus') AND is_main_query()){
+    $query->set('orderby', 'title');
+    $query->set('order', 'ASC');
+    $query->set('post_per_page', -1);
+
+  }
   // Create Custom Query for Programs
   if(!is_admin() AND is_post_type_archive('program') AND is_main_query()){
     $query->set('orderby', 'title');
