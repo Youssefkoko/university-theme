@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./js/modules/Search.js"],"names":["Search","constructor"],"mappings":";;;;;;;;;;AAAA;AAAA,MAAMA,MAAN,CAAa;AACXC,aAAW,GAAE,CAEZ;;AAHU;;AAMED,qEAAf,E","file":"scripts.1c95446955c2c0cc4e43.hot-update.js","sourcesContent":["class Search {\r\n  constructor(){\r\n    \r\n  }\r\n}\r\n\r\nexport default Search;"],"sourceRoot":""}

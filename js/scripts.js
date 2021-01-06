@@ -4,11 +4,11 @@ import "../css/style.css"
 import MobileMenu from "./modules/MobileMenu"
 import HeroSlider from "./modules/HeroSlider"
 
-
+import Search from "./modules/Search"
 // Instantiate a new object using our modules/classes
-var mobileMenu = new MobileMenu()
-var heroSlider = new HeroSlider()
-
+const mobileMenu = new MobileMenu()  
+const heroSlider = new HeroSlider()  
+const search = new Search()
 
 // Allow new JS and CSS to load in browser without a traditional page refresh
 if (module.hot) {
