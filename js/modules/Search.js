@@ -2,7 +2,7 @@ import $ from 'jquery';
 class Search {
   // Descripe or Initiate or Create the Object
   constructor(){
-    this.resultsDev = $('#search-overlay__results');
+    this.resultsDiv = $('#search-overlay__results');
     this.openButton = $('.js-search-trigger');
     this.closeButton = $('.search-overlay__close');
     this.searchOverlay = $('.search-overlay');
@@ -27,12 +27,12 @@ class Search {
       clearTimeout(this.typingTimer);
       if(this.searchField.val()){
         if(!this.isSpinnerVisibale){
-          this.resultsDev.html('<div class="spinner-loader"></div>')
+          this.resultsDiv.html('<div class="spinner-loader"></div>')
           this.isSpinnerVisibale = true;
         }    
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 1500);
       }else{
-        this.resultsDev.html('');
+        this.resultsDiv.html('');
         this.isSpinnerVisibale = false;
       }
       // end if 
@@ -40,10 +40,24 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults(){
-    this.resultsDev.html('imagine reuslts here');
-    this.isSpinnerVisibale = false;
+    $.getJSON('http://localhost/projects/wordpress//wp-json/wp/v2/posts?search='+ this.searchField.val(), data => {
+    
+    this.resultsDiv.html(`
+    <h2>General Information: </h2>
+    <ul class="link-list min-list" >
+      ${data.map(item => `
+        <li> 
+          <a href="${item.link}">${item.title.rendered}</a>
+        </li>` 
+      ).join('')}
+      
+    </ul>
+    `);
+
+    });
   }
   keyPressToggle(e){
+// check the key code and OverLay is not Open and if the input fields are NOT focus
     if(e.keyCode == 83 && !this.isOverlayOpen && !$('input, textarea').is(':focus')){
       this.openOverlay();
     }
