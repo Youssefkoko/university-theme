@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "9303ab4afde2e6c44049";
+/******/ 	var hotCurrentHash = "43ada726b182a392170c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1041,7 +1041,7 @@ __webpack_require__.r(__webpack_exports__);
 class Search {
   // Descripe or Initiate or Create the Object
   constructor() {
-    this.resultsDev = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#search-overlay__results');
+    this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#search-overlay__results');
     this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.js-search-trigger');
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.search-overlay__close');
     this.searchOverlay = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.search-overlay');
@@ -1069,13 +1069,13 @@ class Search {
 
       if (this.searchField.val()) {
         if (!this.isSpinnerVisibale) {
-          this.resultsDev.html('<div class="spinner-loader"></div>');
+          this.resultsDiv.html('<div class="spinner-loader"></div>');
           this.isSpinnerVisibale = true;
         }
 
-        this.typingTimer = setTimeout(this.getResults.bind(this), 2000);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 1500);
       } else {
-        this.resultsDev.html('');
+        this.resultsDiv.html('');
         this.isSpinnerVisibale = false;
       } // end if 
 
@@ -1085,11 +1085,22 @@ class Search {
   }
 
   getResults() {
-    this.resultsDev.html('imagine reuslts here');
-    this.isSpinnerVisibale = false;
+    jquery__WEBPACK_IMPORTED_MODULE_0___default.a.getJSON('http://localhost/projects/wordpress//wp-json/wp/v2/posts?search=' + this.searchField.val(), data => {
+      this.resultsDiv.html(`
+    <h2>General Information: </h2>
+    <ul class="link-list min-list" >
+      ${data.map(item => `
+        <li> 
+          <a href="${item.link}">${item.title.rendered}</a>
+        </li>`).join('')}
+      
+    </ul>
+    `);
+    });
   }
 
   keyPressToggle(e) {
+    // check the key code and OverLay is not Open and if the input fields are NOT focus
     if (e.keyCode == 83 && !this.isOverlayOpen && !jquery__WEBPACK_IMPORTED_MODULE_0___default()('input, textarea').is(':focus')) {
       this.openOverlay();
     }
