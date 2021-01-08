@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "43ada726b182a392170c";
+/******/ 	var hotCurrentHash = "ce4b4db5f189a1785a86";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1041,6 +1041,7 @@ __webpack_require__.r(__webpack_exports__);
 class Search {
   // Descripe or Initiate or Create the Object
   constructor() {
+    this.addSearchHTML();
     this.resultsDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()('#search-overlay__results');
     this.openButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.js-search-trigger');
     this.closeButton = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.search-overlay__close');
@@ -1085,17 +1086,19 @@ class Search {
   }
 
   getResults() {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default.a.getJSON('http://localhost/projects/wordpress//wp-json/wp/v2/posts?search=' + this.searchField.val(), data => {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default.a.getJSON(themeData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val(), data => {
       this.resultsDiv.html(`
     <h2>General Information: </h2>
-    <ul class="link-list min-list" >
-      ${data.map(item => `
-        <li> 
-          <a href="${item.link}">${item.title.rendered}</a>
-        </li>`).join('')}
+      ${data.length ? `<ul class="link-list min-list" >` : `<p>No Search Found.</p>`}
+
+        ${data.map(item => `
+          <li> 
+            <a href="${item.link}">${item.title.rendered}</a>
+          </li>`).join('')}
       
-    </ul>
+      ${data.length ? `</ul>` : ''}
     `);
+      isSpinnerVisibale = false;
     });
   }
 
@@ -1120,6 +1123,25 @@ class Search {
     this.searchOverlay.removeClass('search-overlay--active');
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').removeClass('body-no-scroll');
     this.isOverlayOpen = false;
+  }
+
+  addSearchHTML() {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').append(`
+    <div class="search-overlay">
+    <div class="search-overlay__top">
+      <div class="container">
+        <i class="fa fa-search search-overlay__icon" aria-hidden="true"></i>
+        <input type="text" name="" class="search-term" id="search-term" placeholder="Search...">
+        <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="container">
+      <div id="search-overlay__results">
+      hello
+      </div>
+    </div>
+  </div>
+    `);
   }
 
 }
