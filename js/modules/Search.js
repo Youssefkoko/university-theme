@@ -2,6 +2,7 @@ import $ from 'jquery';
 class Search {
   // Descripe or Initiate or Create the Object
   constructor(){
+    this.addSearchHTML();
     this.resultsDiv = $('#search-overlay__results');
     this.openButton = $('.js-search-trigger');
     this.closeButton = $('.search-overlay__close');
@@ -30,7 +31,7 @@ class Search {
           this.resultsDiv.html('<div class="spinner-loader"></div>')
           this.isSpinnerVisibale = true;
         }    
-        this.typingTimer = setTimeout(this.getResults.bind(this), 1500);
+        this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       }else{
         this.resultsDiv.html('');
         this.isSpinnerVisibale = false;
@@ -40,21 +41,30 @@ class Search {
     this.previousValue = this.searchField.val();
   }
   getResults(){
-    $.getJSON('http://localhost/projects/wordpress//wp-json/wp/v2/posts?search='+ this.searchField.val(), data => {
-    
-    this.resultsDiv.html(`
-    <h2>General Information: </h2>
-    <ul class="link-list min-list" >
-      ${data.map(item => `
-        <li> 
-          <a href="${item.link}">${item.title.rendered}</a>
-        </li>` 
-      ).join('')}
-      
-    </ul>
-    `);
+    $.when(
+      $.getJSON(themeData.root_url + '/wp-json/wp/v2/posts?search='+ this.searchField.val()), 
+      $.getJSON(themeData.root_url + '/wp-json/wp/v2/pages?search='+ this.searchField.val())
+    ).then((posts, pages) => {
+      var compinedResults = posts[0].concat(pages[0]);
+      this.resultsDiv.html(`
+      <h2>General Information: </h2>
+        ${compinedResults.length ? `<ul class="link-list min-list" >` : `<p>No Search Found.</p>`}
 
-    });
+          ${compinedResults.map(item => `
+            <li> 
+              <a href="${item.link}">${item.title.rendered}</a>
+              ${item.type == 'post' ? `By: ${item.authorName}` : ''}
+            </li>` 
+          ).join('')}
+        
+        ${compinedResults.length ? `</ul>` : ''}
+      `);
+    }, () => {
+      this.resultsDiv.html('Unexpected error, Please Try Again.');
+    })
+    isSpinnerVisibale = false;
+
+
   }
   keyPressToggle(e){
 // check the key code and OverLay is not Open and if the input fields are NOT focus
@@ -68,12 +78,34 @@ class Search {
   openOverlay(){
     this.searchOverlay.addClass('search-overlay--active');
     $('body').addClass('body-no-scroll');
-    
+    setTimeout(() => this.searchField.focus(), 301);
     this.isOverlayOpen = true;
   }
   closeOverlay(){
   this.searchOverlay.removeClass('search-overlay--active');
   $('body').removeClass('body-no-scroll');
+  this.searchField.val('');
   this.isOverlayOpen = false;
-}
-} export default Search;
+  }
+  addSearchHTML(){
+    $('body').append(`
+    <div class="search-overlay">
+    <div class="search-overlay__top">
+      <div class="container">
+        <i class="fa fa-search search-overlay__icon" aria-hidden="true"></i>
+        <input type="text" name="" class="search-term" id="search-term" placeholder="Search...">
+        <i class="fa fa-window-close search-overlay__close" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="container">
+      <div id="search-overlay__results">
+      hello
+      </div>
+    </div>
+  </div>
+    `);
+  }
+
+} 
+
+export default Search;
