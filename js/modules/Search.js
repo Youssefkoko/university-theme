@@ -70,13 +70,18 @@ class Search {
         
         ${results.programs.length ? `</ul>` : ''}
           <h2 class="search-overlay__section-title">Professors</h2>
-          ${results.professors.length ? `<ul class="link-list min-list" >` : `<p>No Professor Found.</p>`}
+          ${results.professors.length ? `<ul class="professor-cards" >` : `<p>No Professor Found.</p>`}
 
           ${results.professors.map(item => `
-            <li> 
-              <a href="${item.link}">${item.title}</a>
-              
-            </li>` 
+            <li class="professor-card__list-item" >
+              <a class="professor-card" href="${item.link}">
+                <img src="${item.image}" class="professor-card__image" alt="">
+                <span class="professor-card__name">
+                ${item.title}
+                </span>
+              </a>
+             </li>
+            ` 
           ).join('')}
         
         ${results.professors.length ? `</ul>` : ''}
@@ -94,13 +99,31 @@ class Search {
         
         ${results.campuses.length ? `</ul>` : ''}
           <h2 class="search-overlay__section-title">Events</h2>
-          ${results.events.length ? `<ul class="link-list min-list" >` : `<p>No Event Found. <a href="${themeData.root_url}/events">View All Events</a> </p>`}
+          ${results.events.length ? '' : `<p>No Event Found. <a href="${themeData.root_url}/events">View All Events</a> </p>`}
 
           ${results.events.map(item => `
-            <li> 
-              <a href="${item.link}">${item.title}</a>
-              
-            </li>` 
+            <div class="event-summary">
+              <a class="event-summary__date t-center" href="${item.link}">
+                <span class="event-summary__month">
+                ${item.month}
+                </span>
+                <span class="event-summary__day">${item.day}</span>
+              </a>
+              <div class="event-summary__content">
+                <h5 class="event-summary__title headline headline--tiny">
+                  <a href="<?php the_permalink(); ?>">
+                    ${item.title}
+                  </a>
+                </h5>
+                <p> 
+                ${item.description}
+                  <a href="${item.link}"
+                      class="nu gray">Learn more
+                  </a>
+                </p>
+              </div>
+            </div>
+            ` 
           ).join('')}
         
         ${results.events.length ? `</ul>` : ''}
