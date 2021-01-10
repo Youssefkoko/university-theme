@@ -13,6 +13,10 @@
       </div>
 
       <div class="generic-content">
+      <?php if ( get_field('main_body_content') ) : ?>
+        <p><?php echo get_field('main_body_content'); ?></p>
+      <?php endif; ?>
+      
         <?php the_content(); ?>
       </div>
       <!-- Professors -->
