@@ -4,12 +4,12 @@ add_action('rest_api_init', 'university_register_search');
 function university_register_search(){
   register_rest_route('university/v1', 'search', array(
     'method' => WP_REST_SERVER::READABLE,
-    'callback' => 'universitySearchResults'
+    'callback' => 'universitySearchResults' //callback function
   ));
 }
 
 function universitySearchResults($data){
-  $query = new WP_Query(array(
+  $CustomQuery = new WP_Query(array(
     'post_type' => array('post', 'page', 'professor', 'program', 'event', 'campus' ),
     's' => sanitize_text_field($data['term']),
   ));
@@ -20,8 +20,8 @@ function universitySearchResults($data){
     'events' => array(),
     'campuses' => array(),
   );
-  while($query->have_posts()){ 
-    $query->the_post();
+  while($CustomQuery->have_posts()){ 
+    $CustomQuery->the_post();
     if(get_post_type() == 'post' or get_post_type() == 'page'){
       array_push($results['generalInfo'], array(
         'title' => get_the_title(),
@@ -43,6 +43,7 @@ function universitySearchResults($data){
       array_push($results['programs'], array(
         'title' => get_the_title(),
         'link' => get_the_permalink(),
+        'id' => get_the_id(),
       ));
 
     }
@@ -72,5 +73,38 @@ function universitySearchResults($data){
     }
     
   }
+
+  if($results['programs']) : 
+    $programMetaQuery = array('relation' => 'OR');
+
+  foreach ($results['programs'] as $prog){
+    array_push($programMetaQuery,  array(
+      'key' => 'related_programs',
+      'compare' => 'LIKE',
+      'value' => '"' . $prog['id'] . '"',
+    ));
+  }
+  $programRelationshipQuery = new WP_Query(array(
+    'post_type' => 'professor',
+    'meta_query' => $programMetaQuery,
+  ));
+  while ($programRelationshipQuery->have_posts()) : 
+    $programRelationshipQuery->the_post();
+
+    if(get_post_type() == 'professor'): 
+      array_push($results['professors'], array(
+        'title' => get_the_title(),
+        'link' => get_the_permalink(),
+        'image' => get_the_post_thumbnail_url(0, 'professor-landscape'),
+      ));
+
+    endif;
+
+  endwhile; 
+  
+  $results['professors'] = array_values(array_unique($results['professors'], SORT_REGULAR));
+  endif;
+  
+  
   return $results;
 }
