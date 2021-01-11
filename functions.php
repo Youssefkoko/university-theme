@@ -16,8 +16,8 @@ function university_files() {
     wp_enqueue_script('main-university-js', 'http://localhost:3000/bundled.js', NULL, '1.0', true);
   } else {
     wp_enqueue_script('our-vendors-js', get_theme_file_uri('/bundled-assets/vendors~scripts.a6d527facd974cdcaf68.js'), NULL, '1.0', true);
-    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.e5c7af4fc7d256b6b8b9.js'), NULL, '1.0', true);
-    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.e5c7af4fc7d256b6b8b9.css'));
+    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.fb8254aa60e60bf82e47.js'), NULL, '1.0', true);
+    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.fb8254aa60e60bf82e47.css'));
   }
   wp_localize_script('main-university-js', 'themeData', array(
     'root_url' => get_site_url(),
@@ -107,4 +107,48 @@ function PageBanner($args = NULL) {
       </div>  
     </div> 
   <?php 
+}
+
+
+// Redirect users to Home page
+
+function redirect_subs_to_frontEnd() {
+  $ourCurrentUser = wp_get_current_user();
+
+  if(count($ourCurrentUser->roles) == 1 && $ourCurrentUser->roles[0] == 'subscriber'){
+    wp_redirect(site_url('/'));
+    exit;
+  }
+}
+
+add_action('admin_init', 'redirect_subs_to_frontEnd');
+
+function no_subscriber_admin_bar() {
+  $ourCurrentUser = wp_get_current_user();
+
+  if(count($ourCurrentUser->roles) == 1 && $ourCurrentUser->roles[0] == 'subscriber'){
+    show_admin_bar(false);
+  }
+}
+
+add_action('wp_loaded', 'no_subscriber_admin_bar');
+
+
+// Custmoze Login Screen
+add_filter('login_headerurl', 'ourHeaderUrl');
+function ourHeaderUrl() {
+  return esc_url(site_url('/'));
+}
+
+add_action('login_enqueue_scripts', 'ourLoginCss');
+
+function ourLoginCss() {
+  wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.fb8254aa60e60bf82e47.css'));
+  wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+
+}
+
+add_filter('login_headertitle', 'ourLoginTitle');
+function ourLoginTitle(){
+  return get_bloginfo('name');
 }
