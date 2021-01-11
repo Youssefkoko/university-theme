@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "3b4e75ccfd484fa5a1e1";
+/******/ 	var hotCurrentHash = "b0abaf0561036b24ccda";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1164,7 +1164,6 @@ class Search {
     document.body.classList.add("body-no-scroll");
     this.searchField.value = "";
     setTimeout(() => this.searchField.focus(), 301);
-    console.log("our open method just ran!");
     this.isOverlayOpen = true;
     return false;
   }
@@ -1172,7 +1171,6 @@ class Search {
   closeOverlay() {
     this.searchOverlay.classList.remove("search-overlay--active");
     document.body.classList.remove("body-no-scroll");
-    console.log("our close method just ran!");
     this.isOverlayOpen = false;
   }
 

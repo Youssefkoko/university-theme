@@ -1,58 +1,72 @@
-import axios from "axios"
+webpackHotUpdate("scripts",{
+
+/***/ "./js/modules/Search.js":
+/*!******************************!*\
+  !*** ./js/modules/Search.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 
 class Search {
-  // 1. describe and create / initiate our object
+  // 1. describe and create/initiate our object
   constructor() {
-    this.addSearchHTML()
-    this.resultsDiv = document.querySelector("#search-overlay__results")
-    this.openButton = document.querySelectorAll(".js-search-trigger")
-    this.closeButton = document.querySelector(".search-overlay__close")
-    this.searchOverlay = document.querySelector(".search-overlay")
-    this.searchField = document.querySelector("#search-term")
-    this.isOverlayOpen = false
-    this.isSpinnerVisible = false
-    this.previousValue
-    this.typingTimer
-    this.events()
-  }
+    this.addSearchHTML();
+    this.resultsDiv = document.querySelector("#search-overlay__results");
+    this.openButton = document.querySelectorAll(".js-search-trigger");
+    this.closeButton = document.querySelector(".search-overlay__close");
+    this.searchOverlay = document.querySelector(".search-overlay");
+    this.searchField = document.querySelector("#search-term");
+    this.isOverlayOpen = false;
+    this.isSpinnerVisible = false;
+    this.previousValue;
+    this.typingTimer;
+    this.events();
+  } // 2. events
 
-  // 2. events
+
   events() {
     this.openButton.forEach(el => {
       el.addEventListener("click", e => {
-        e.preventDefault()
-        this.openOverlay()
-      })
-    })
+        e.preventDefault();
+        this.openOverlay();
+      });
+    });
+    this.closeButton.addEventListener("click", () => this.closeOverlay());
+    document.addEventListener("keydown", e => this.keyPressDispatcher(e));
+    this.searchField.addEventListener("keyup", () => this.typingLogic());
+  } // 3. methods (function, action...)
 
-    this.closeButton.addEventListener("click", () => this.closeOverlay())
-    document.addEventListener("keydown", e => this.keyPressDispatcher(e))
-    this.searchField.addEventListener("keyup", () => this.typingLogic())
-  }
 
-  // 3. methods (function, action...)
   typingLogic() {
     if (this.searchField.value != this.previousValue) {
-      clearTimeout(this.typingTimer)
+      clearTimeout(this.typingTimer);
 
       if (this.searchField.value) {
         if (!this.isSpinnerVisible) {
           this.resultsDiv.innerHTML = '<div class="spinner-loader"></div>';
           this.isSpinnerVisible = true;
         }
-        this.typingTimer = setTimeout(this.getResults.bind(this), 750)
+
+        this.typingTimer = setTimeout(this.getResults.bind(this), 750);
       } else {
         this.resultsDiv.innerHTML = "";
         this.isSpinnerVisible = false;
       }
     }
-    this.previousValue = this.searchField.value
+
+    this.previousValue = this.searchField.value;
   }
 
   async getResults() {
     try {
-      const response = await axios.get(universityData.root_url + "/wp-json/university/v1/search?term=" + this.searchField.value)
-      const results = response.data
+      const response = await axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(universityData.root_url + "/wp-json/university/v1/search?term=" + this.searchField.value);
+      const results = response.data;
       this.resultsDiv.innerHTML = `
         <div class="row">
           <div class="one-third">
@@ -69,18 +83,14 @@ class Search {
 
             <h2 class="search-overlay__section-title">Professors</h2>
             ${results.professors.length ? '<ul class="professor-cards">' : `<p>No professors match that search.</p>`}
-              ${results.professors
-          .map(
-            item => `
+              ${results.professors.map(item => `
                 <li class="professor-card__list-item">
                   <a class="professor-card" href="${item.permalink}">
                     <img class="professor-card__image" src="${item.image}">
                     <span class="professor-card__name">${item.title}</span>
                   </a>
                 </li>
-              `
-          )
-          .join("")}
+              `).join("")}
             ${results.professors.length ? "</ul>" : ""}
 
           </div>
@@ -92,9 +102,7 @@ class Search {
 
             <h2 class="search-overlay__section-title">Events</h2>
             ${results.events.length ? "" : `<p>No events match that search. <a href="${universityData.root_url}/events">View all events</a></p>`}
-              ${results.events
-          .map(
-            item => `
+              ${results.events.map(item => `
                 <div class="event-summary">
                   <a class="event-summary__date t-center" href="${item.permalink}">
                     <span class="event-summary__month">${item.month}</span>
@@ -105,49 +113,44 @@ class Search {
                     <p>${item.description} <a href="${item.permalink}" class="nu gray">Learn more</a></p>
                   </div>
                 </div>
-              `
-          )
-          .join("")}
+              `).join("")}
 
           </div>
         </div>
-      `
-      this.isSpinnerVisible = false
+      `;
+      this.isSpinnerVisible = false;
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
   keyPressDispatcher(e) {
     if (e.keyCode == 83 && !this.isOverlayOpen && document.activeElement.tagName != "INPUT" && document.activeElement.tagName != "TEXTAREA") {
-      this.openOverlay()
+      this.openOverlay();
     }
 
     if (e.keyCode == 27 && this.isOverlayOpen) {
-      this.closeOverlay()
+      this.closeOverlay();
     }
   }
 
   openOverlay() {
-    this.searchOverlay.classList.add("search-overlay--active")
-    document.body.classList.add("body-no-scroll")
-    this.searchField.value = ""
-    setTimeout(() => this.searchField.focus(), 301)
-    this.isOverlayOpen = true
+    this.searchOverlay.classList.add("search-overlay--active");
+    document.body.classList.add("body-no-scroll");
+    this.searchField.value = "";
+    setTimeout(() => this.searchField.focus(), 301);
+    this.isOverlayOpen = true;
     return false;
   }
 
   closeOverlay() {
-    this.searchOverlay.classList.remove("search-overlay--active")
-    document.body.classList.remove("body-no-scroll")
-
-    this.isOverlayOpen = false
+    this.searchOverlay.classList.remove("search-overlay--active");
+    document.body.classList.remove("body-no-scroll");
+    this.isOverlayOpen = false;
   }
 
   addSearchHTML() {
-    document.body.insertAdjacentHTML(
-      "beforeend",
-      `
+    document.body.insertAdjacentHTML("beforeend", `
       <div class="search-overlay">
         <div class="search-overlay__top">
           <div class="container">
@@ -162,9 +165,14 @@ class Search {
         </div>
 
       </div>
-    `
-    )
+    `);
   }
+
 }
 
-export default Search
+/* harmony default export */ __webpack_exports__["default"] = (Search);
+
+/***/ })
+
+})
+//# sourceMappingURL=scripts.7c23c119c7a45bcb3a58.hot-update.js.map
