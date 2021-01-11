@@ -7,7 +7,7 @@
     pageBanner(array(
       // 'title' => 'This title.',
       // 'subtitle' => 'here some dummy text for subtitle.',
-      // 'photo' => 'https://www.dar-kom.com/wp-content/uploads/2020/03/Fes-Medina-scaled.jpg',
+      // 'photo' => '',
     ));
     ?>
     
