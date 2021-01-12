@@ -152,3 +152,9 @@ add_filter('login_headertitle', 'ourLoginTitle');
 function ourLoginTitle(){
   return get_bloginfo('name');
 }
+
+add_filter( '_school_no_post_text', 'change_text_no_post', 10, 1 );
+
+function change_text_no_post($text){
+  return '<h1>NOthing here.</h1>';
+}
