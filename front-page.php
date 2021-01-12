@@ -33,10 +33,10 @@
             ),
           )
         ));
-        while($homepageEvents->have_posts()){
+        while($homepageEvents->have_posts()):
           $homepageEvents->the_post();   
           get_template_part('template-parts/content', 'event');
-        }
+        endwhile;
          ?>
 
       <p class="t-center no-margin"><a href="<?php echo get_post_type_archive_link('event'); ?>" class="btn btn--blue">View All Events</a></p>
@@ -45,36 +45,55 @@
   </div>
   <div class="full-width-split__two">
     <div class="full-width-split__inner">
-      <h2 class="headline headline--small-plus t-center">From Our Blogs</h2>
+      <h2 class="headline headline--small-plus t-center"><?php esc_html_e('From Our Blogs', 'school'); ?></h2>
       <?php
-          $homepagePosts = new WP_Query(array(
-            'posts_per_page' => 2
-          ));
-
-          while ($homepagePosts->have_posts()) {
-            $homepagePosts->the_post(); ?>
-      <div class="event-summary">
-        <a class="event-summary__date event-summary__date--beige t-center" href="<?php the_permalink(); ?>">
-          <span class="event-summary__month"><?php the_time('M'); ?></span>
-          <span class="event-summary__day"><?php the_time('d'); ?></span>
-        </a>
-        <div class="event-summary__content">
-          <h5 class="event-summary__title headline headline--tiny"><a
-              href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h5>
-          <?php if(has_excerpt()){
-              echo get_the_excerpt();
-          }else{
-            echo wp_trim_words(get_the_content(), 18);
-          } ?> 
-            <a href="<?php the_permalink(); ?>" class="nu gray">Read more</a>
-          
+      $homepagePosts = new WP_Query(array(
+        'posts_per_page' => 2
+      ));
+      if($homepagePosts):
+      while ($homepagePosts->have_posts()) :
+        $homepagePosts->the_post();
+      ?>
+        <div class="event-summary">
+          <a class="event-summary__date event-summary__date--beige t-center" href="<?php the_permalink(); ?>">
+            <span class="event-summary__month"> <time><?php the_time('M'); ?></time> </span>
+            <span class="event-summary__day"> <time><?php the_time('d'); ?></time></span>
+          </a>
+          <div class="event-summary__content">
+            <h5 class="event-summary__title headline headline--tiny"><a
+                href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+            <?php if(has_excerpt()){
+                echo get_the_excerpt();
+            }else{
+              echo wp_trim_words(get_the_content(), 18);
+            } ?> 
+            <!-- esc_html and _e is just echo the string -->
+              <a href="<?php the_permalink(); ?>" class="nu gray" title="<?php 
+              the_title_attribute(); ?>"><?php
+              printf(
+                wp_kses( __('Read more <span class="screen-reader-text">About</span>  %s', 'school'),
+                [
+                  'span' => [
+                    'class' => []
+                  ]
+                ] )
+                ,
+                get_the_title()
+              );
+              ?>
+              </a>
+            
+          </div>
         </div>
-      </div>
-      <?php } wp_reset_postdata();
-        ?>
+      <?php
+      endwhile; wp_reset_postdata();
+    endif;
+    ?>
 
-      <p class="t-center no-margin"><a href="<?php echo site_url('/blog') ?>" class="btn btn--yellow">View All Blog
-          Posts</a></p>
+      <p class="t-center no-margin"><a href="<?php echo site_url('/blog') ?>" class="btn btn--yellow">
+      
+      <?php esc_html_e('View All Blog Posts', 'school'); ?>
+      </a></p>
     </div>
   </div>
 </div>
