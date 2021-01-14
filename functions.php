@@ -15,12 +15,13 @@ function university_files() {
   if (strstr($_SERVER['SERVER_NAME'], 'http://localhost:3000/')) {
     wp_enqueue_script('main-university-js', 'http://localhost:3000/bundled.js', NULL, '1.0', true);
   } else {
-    wp_enqueue_script('our-vendors-js', get_theme_file_uri('/bundled-assets/vendors~scripts.a6d527facd974cdcaf68.js'), NULL, '1.0', true);
-    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.fb8254aa60e60bf82e47.js'), NULL, '1.0', true);
-    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.fb8254aa60e60bf82e47.css'));
+    wp_enqueue_script('our-vendors-js', get_theme_file_uri('/bundled-assets/vendors~scripts.349d69f1591f692de4e8.js'), NULL, '1.0', true);
+    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.3cd4a10c7d9948082e4e.js'), NULL, '1.0', true);
+    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.3cd4a10c7d9948082e4e.css'));
   }
   wp_localize_script('main-university-js', 'themeData', array(
     'root_url' => get_site_url(),
+    'nonce' => wp_create_nonce('wp_rest'),
   ));
 
   
@@ -89,24 +90,23 @@ function PageBanner($args = NULL) {
     }
   }
   ?>
-  <div class="page-banner">
-      <div class="page-banner__bg-image" 
-        style="background-image: url(<?php echo $args['photo']; ?>);">
-      </div>
-      <div class="page-banner__content container container--narrow">
-        <h1 class="page-banner__title"><?php if($args['title']) echo $args['title']; ?></h1>
-        <div class="page-banner__intro">
-          <p>
-            <?php if($args['subtitle']){
+<div class="page-banner">
+  <div class="page-banner__bg-image" style="background-image: url(<?php echo $args['photo']; ?>);">
+  </div>
+  <div class="page-banner__content container container--narrow">
+    <h1 class="page-banner__title"><?php if($args['title']) echo $args['title']; ?></h1>
+    <div class="page-banner__intro">
+      <p>
+        <?php if($args['subtitle']){
             // echo get_field('page_banner_subtitle'); 
             echo $args['subtitle']; 
           }
             ?>
-          </p>
-        </div>
-      </div>  
-    </div> 
-  <?php 
+      </p>
+    </div>
+  </div>
+</div>
+<?php 
 }
 
 
@@ -143,7 +143,7 @@ function ourHeaderUrl() {
 add_action('login_enqueue_scripts', 'ourLoginCss');
 
 function ourLoginCss() {
-  wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.fb8254aa60e60bf82e47.css'));
+  wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.3cd4a10c7d9948082e4e.css'));
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
 
 }
@@ -153,8 +153,5 @@ function ourLoginTitle(){
   return get_bloginfo('name');
 }
 
-add_filter( '_school_no_post_text', 'change_text_no_post', 10, 1 );
-
-function change_text_no_post($text){
-  return '<h1>NOthing here.</h1>';
-}
+// filter hook to change no post found in the index file
+// add_filter( '_school_no_post_text', 'change_text_no_post', 10, 1 );
