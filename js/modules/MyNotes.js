@@ -3,30 +3,22 @@ import $ from 'jquery'
 class Notes {
   constructor() {
     this.deleteBtn = document.querySelectorAll(".delete-note");
+    this.ul = document.querySelector("#my-notes");
     this.editBtn = document.querySelectorAll(".edit-note");
     this.updateBtn = document.querySelector('.update-note');
-    console.log(this.updateBtn);
+    this.submitBtn = document.querySelector('.submit-note');
+    console.log(this.submitBtn);
     this.events();
     
   }
   events() {
+    $(this.ul).on('click', '.delete-note', this.deleteNote)
     
-    // const deleteBtn =  Array.from(this.deleteNote);
-    this.deleteBtn.forEach( (btn) => {
-      btn.addEventListener('click', (e) =>{
-        this.deleteNote(e)
-      })
-    })
-    // End
-    this.editBtn.forEach( (btn) => {
-      btn.addEventListener('click', (e) =>{
-        this.editNote(e)
-      })
-    })
-    // End 
-    this.updateBtn.addEventListener('click', (e) =>{
-        this.updateNote(e)
-      })
+    $(this.ul).on('click', '.edit-note', this.editNote.bind(this))
+    
+    $(this.ul).on('click', '.update-note', this.updateNote.bind(this))
+    
+    $('.submit-note').on('click', this.createNote.bind(this));
     
   }
 
@@ -101,6 +93,53 @@ class Notes {
         },
       })
   }
+
+  createNote(e) {
+    let newNoteTitle = $('.new-note-title').val();
+    let newNoteBody = $('.new-note-body').val();
+    if(newNoteTitle !== '' && newNoteBody !== ''){
+      let newPost = {
+        'title': newNoteTitle,
+        'content': newNoteBody,
+        'status': 'private',
+      }
+        $.ajax({
+          beforeSend: (xhr) => {
+            xhr.setRequestHeader('X-WP-Nonce', themeData.nonce);
+          },
+          url: themeData.root_url + '/wp-json/wp/v2/note/',
+          type: 'POST',
+          data: newPost,
+          success: (res) => {
+            console.log(res)
+            $('.new-note-title, .new-note-body').val('');
+            $(`
+            <li data-id="${res.id}">
+            <input readonly class="note-title-field" type="text" value="${res.title.rendered}" />
+            <span class="edit-note"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</span>
+            <span class="delete-note"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</span>
+            <textarea readonly class="note-body-field" name="" id="" cols="30"
+              rows="10">
+              ${res.content.rendered}
+            </textarea>
+              
+            <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i> Save</span>
+          </li>
+            `).prependTo('#my-notes').hide().slideDown();
+            console.log('success YEEEY');
+            
+          },
+          error: (response) => {
+            console.log('error');
+            console.log(response);
+          },
+        })
+
+      // end if
+    }
+    
+  }
+
  }
 
  export default Notes;
