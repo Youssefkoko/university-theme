@@ -65,10 +65,7 @@ pageBanner(array(
             <?php endwhile;
     echo paginate_links();
   else:
-?>
-
-    <p><?php echo apply_filters('_school_no_post_text', esc_html__('Sorry, No Post Found.', 'school')) ?></p>
-<?php 
+    get_template_part('template-parts/content', 'none');
   endif; 
 ?>
 </div>

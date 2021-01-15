@@ -14,6 +14,12 @@ endif;
     ));
     ?>
 <div class="container container--narrow page-section">
+    <div class="create-note">
+      <h2 class="headline headline--medium" >Create New Note</h2>
+      <input class="new-note-title" type="text" placeholder="Title" name="" id="">
+      <textarea name="" id="" cols="30" rows="10" class="new-note-body" placeholder="Your New Note here"></textarea>
+      <span class="submit-note">Create Note</span>
+    </div>
   <ul class="min-list link-list" id="my-notes">
     <?php 
       $args = array(
@@ -33,7 +39,7 @@ endif;
         rows="10"><?php echo  esc_attr(wp_strip_all_tags(get_the_content())); ?>
       </textarea>
         
-      <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i> Save</span>
+      <span class="update-note btn btn--  blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i> Save</span>
     </li>
     <?php
         endwhile;

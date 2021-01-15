@@ -60,8 +60,11 @@
             <span class="event-summary__day"> <time><?php the_time('d'); ?></time></span>
           </a>
           <div class="event-summary__content">
-            <h5 class="event-summary__title headline headline--tiny"><a
-                href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+            <h5 class="event-summary__title headline headline--tiny">
+              <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+              <?php the_title(); ?>
+              </a>
+            </h5>
             <?php if(has_excerpt()){
                 echo get_the_excerpt();
             }else{
@@ -69,7 +72,8 @@
             } ?> 
             <!-- esc_html and _e is just echo the string -->
               <a href="<?php the_permalink(); ?>" class="nu gray" title="<?php 
-              the_title_attribute(); ?>"><?php
+              the_title_attribute(); ?>">
+              <?php
               printf(
                 wp_kses( __('Read more <span class="screen-reader-text">About</span>  %s', 'school'),
                 [
