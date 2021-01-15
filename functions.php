@@ -15,9 +15,9 @@ function university_files() {
   if (strstr($_SERVER['SERVER_NAME'], 'http://localhost:3000/')) {
     wp_enqueue_script('main-university-js', 'http://localhost:3000/bundled.js', NULL, '1.0', true);
   } else {
-    wp_enqueue_script('our-vendors-js', get_theme_file_uri('/bundled-assets/vendors~scripts.349d69f1591f692de4e8.js'), NULL, '1.0', true);
-    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.3cd4a10c7d9948082e4e.js'), NULL, '1.0', true);
-    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.3cd4a10c7d9948082e4e.css'));
+    wp_enqueue_script('our-vendors-js', get_theme_file_uri('/bundled-assets/vendors~scripts.bc40ae15d79260f963aa.js'), NULL, '1.0', true);
+    wp_enqueue_script('main-university-js', get_theme_file_uri('/bundled-assets/scripts.103fa4a009d68e59e8d9.js'), NULL, '1.0', true);
+    wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.103fa4a009d68e59e8d9.css'));
   }
   wp_localize_script('main-university-js', 'themeData', array(
     'root_url' => get_site_url(),
@@ -133,6 +133,15 @@ function no_subscriber_admin_bar() {
 
 add_action('wp_loaded', 'no_subscriber_admin_bar');
 
+// Force Note Post to be Private
+function makeNotepRivate($data){
+  if($data['post_type'] == 'note' AND $data['post_status'] != 'trash'){
+  $data['post_status'] = 'private';
+  }
+  return $data;
+}
+add_filter('wp_insert_post_data', 'makeNotepRivate');
+
 
 // Custmoze Login Screen
 add_filter('login_headerurl', 'ourHeaderUrl');
@@ -143,7 +152,7 @@ function ourHeaderUrl() {
 add_action('login_enqueue_scripts', 'ourLoginCss');
 
 function ourLoginCss() {
-  wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.3cd4a10c7d9948082e4e.css'));
+  wp_enqueue_style('our-main-styles', get_theme_file_uri('/bundled-assets/styles.103fa4a009d68e59e8d9.css'));
   wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
 
 }
