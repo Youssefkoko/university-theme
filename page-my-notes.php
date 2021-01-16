@@ -19,6 +19,7 @@ endif;
       <input class="new-note-title" type="text" placeholder="Title" name="" id="">
       <textarea name="" id="" cols="30" rows="10" class="new-note-body" placeholder="Your New Note here"></textarea>
       <span class="submit-note">Create Note</span>
+      <span class="note-limit-message">Note Reached Limit: Delete Notes that you dont want.</span>
     </div>
   <ul class="min-list link-list" id="my-notes">
     <?php 
@@ -38,8 +39,7 @@ endif;
       <textarea readonly class="note-body-field" name="" id="" cols="30"
         rows="10"><?php echo  esc_textarea( wp_strip_all_tags(get_the_content())); ?>
       </textarea>
-        
-      <span class="update-note btn btn--  blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i> Save</span>
+      <span class="update-note btn btn--blue btn--small"><i class="fa fa-arrow-right" aria-hidden="true"></i> Save</span>
     </li>
     <?php
         endwhile;

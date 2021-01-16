@@ -63,7 +63,7 @@
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "08d2560ccc4b12140d11";
+/******/ 	var hotCurrentHash = "a50b5099662c7659ca1b";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1091,10 +1091,14 @@ class Notes {
       },
       url: themeData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'),
       type: 'DELETE',
-      success: response => {
+      success: res => {
         thisNote.slideUp();
         console.log('success');
-        console.log(response);
+        console.log(res);
+
+        if (res.userNoteAcount < 5) {
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.note-limit-message').removeClass('active');
+        }
       },
       error: response => {
         console.log('error');
@@ -1136,7 +1140,7 @@ class Notes {
       let newPost = {
         'title': newNoteTitle,
         'content': newNoteBody,
-        'status': 'private'
+        'status': 'publish'
       };
       jquery__WEBPACK_IMPORTED_MODULE_0___default.a.ajax({
         beforeSend: xhr => {
@@ -1163,9 +1167,13 @@ class Notes {
             `).prependTo('#my-notes').hide().slideDown();
           console.log('success YEEEY');
         },
-        error: response => {
+        error: res => {
+          if (res.responseText = 'You have Reached Note limit') {
+            jquery__WEBPACK_IMPORTED_MODULE_0___default()('.note-limit-message').addClass('active');
+          }
+
           console.log('error');
-          console.log(response);
+          console.log(res);
         }
       }); // end if
     }
