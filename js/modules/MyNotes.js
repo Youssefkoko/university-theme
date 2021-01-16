@@ -19,6 +19,7 @@ class Notes {
     $(this.ul).on('click', '.update-note', this.updateNote.bind(this))
     
     $('.submit-note').on('click', this.createNote.bind(this));
+
     
   }
 
@@ -58,10 +59,13 @@ class Notes {
         },
         url: themeData.root_url + '/wp-json/wp/v2/note/' + thisNote.data('id'),
         type: 'DELETE',
-        success: (response) => {
+        success: (res) => {
           thisNote.slideUp();
           console.log('success');
-          console.log(response);
+          console.log(res);
+          if(res.userNoteAcount < 5 ){
+            $('.note-limit-message').removeClass('active');
+          }
         },
         error: (response) => {
           console.log('error');
@@ -101,7 +105,7 @@ class Notes {
       let newPost = {
         'title': newNoteTitle,
         'content': newNoteBody,
-        'status': 'private',
+        'status': 'publish',
       }
         $.ajax({
           beforeSend: (xhr) => {
@@ -129,9 +133,12 @@ class Notes {
             console.log('success YEEEY');
             
           },
-          error: (response) => {
+          error: (res) => {
+            if( res.responseText = 'You have Reached Note limit'){
+              $('.note-limit-message').addClass('active');
+            }
             console.log('error');
-            console.log(response);
+            console.log(res);
           },
         })
 
